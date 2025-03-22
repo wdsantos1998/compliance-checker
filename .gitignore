@@ -17,7 +17,10 @@ yarn-error.log*
 .pnpm-debug.log*
 
 # env files
-.env*
+.env
+.env.local
+.env.*.local
+
 
 # vercel
 .vercel
@@ -25,3 +28,10 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+#vscode
+.vscode/*
+
+# IntelliJ IDEA / JetBrains IDE
+.idea/
+*.iml
