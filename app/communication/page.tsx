@@ -6,6 +6,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import {postToPolicyChecker} from "@/lib/postToPolicyChecker";
+import {useEffect} from "react";
 
 const fetcher = (url: string) =>
     fetch(url, { credentials: 'include' }).then((res) => res.json());

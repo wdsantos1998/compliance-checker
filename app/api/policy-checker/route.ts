@@ -74,24 +74,8 @@ const analyzeEmail = async (emailJson: ParsedEmail) => {
       
       Return a JSON array of confirmed violation objects using this exact schema.
       
-      Example response:
-      [
-        {
-          "id": 2,
-          "title": "False Risk-Free Statement",
-          "description": "The email states that 'This investment is 100% risk-free,' which is misleading and non-compliant.",
-          "severity": "medium",
-          "proposedSolution": "Eliminate the 'risk-free' language and replace it with a balanced risk disclosure.",
-          "timestamp": "2025-03-22T11:52:38.074Z",
-          "emailOrigen": "offers@secureinvest.com",
-          "documentSource": "sanitized_compliance_rules.json"
-        }
-      ]
-      
       If there are no violations, return an empty list.
     `;
-
-        let allViolations: any[] = [];
 
         for (const doc of policyDocuments) {
             const chunks = chunkPolicyContent(doc.content);
@@ -115,7 +99,6 @@ const analyzeEmail = async (emailJson: ParsedEmail) => {
                     // ✅ Sanitize AI output before JSON.parse
                     const aiOutputRaw = response.choices[0].message.content?.trim() || "[]";
 
-                    // ✅ Remove markdown wrapping if present
                     const aiOutputClean = aiOutputRaw
                         .replace(/^```(?:json)?\n?/, '')
                         .replace(/\n?```$/, '')
@@ -123,15 +106,18 @@ const analyzeEmail = async (emailJson: ParsedEmail) => {
 
                     const violations = JSON.parse(aiOutputClean);
 
-                    if (Array.isArray(violations)) {
-                        allViolations = allViolations.concat(violations);
+                    if (Array.isArray(violations) && violations.length > 0) {
+                        console.log("🚨 Violation found. Stopping analysis.");
+                        return violations; // ✅ Return immediately on the first violation
                     }
+
                     // Wait 3 seconds to avoid hitting token-per-minute (TPM) limits
                     await new Promise((resolve) => setTimeout(resolve, 3000));
+
                 } catch (error) {
                     console.error(`⚠️ Failed to process chunk ${randomNumber + 1}:`, error);
-                    allViolations.push({
-                        id: null,
+                    return [{
+                        id: randomNumber + 1,
                         title: "Analysis Error",
                         description: `Error analyzing chunk: ${error}`,
                         severity: "high",
@@ -139,16 +125,19 @@ const analyzeEmail = async (emailJson: ParsedEmail) => {
                         timestamp: new Date().toISOString(),
                         emailOrigen: from,
                         documentSource: doc.filename,
-                    });
+                    }];
                 }
             }
         }
-        return allViolations;
+
+        // ✅ If no violations found, return empty array
+        return [];
     } catch (error) {
         console.error("Unexpected error during analysis:", error);
         return { error: "Internal error processing policy check", details: error };
     }
 };
+
 
 // === Next.js API Route Handler ===
 export async function POST(req: NextRequest) {
