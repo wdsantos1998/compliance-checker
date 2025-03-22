@@ -75,7 +75,7 @@ export default function ComplianceDashboard() {
                 <div className="text-center py-8 text-gray-500">No compliance issues detected</div>
             ) : (
                 <div className="space-y-4">
-                    {flags.map((flag) => (
+                    {flags?.map((flag) => (
                         <ComplianceFlag key={flag.id} flag={flag} onDismiss={() => dismissFlag(flag.id)} />
                     ))}
                 </div>
