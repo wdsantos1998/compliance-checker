@@ -94,6 +94,21 @@ export default function ComplianceDashboard() {
                 >
                     Clear All Issues
                 </Button>
+
+                <Button
+                    variant="secondary"
+                    onClick={async () => {
+                        const res = await fetch("/api/db")
+                        const data = await res.json()
+                        setFlags(data) // ✅ Manual update
+                        toast({
+                            title: "Issues Updated",
+                            description: `Fetched ${data.length} compliance issue(s) from the database.`,
+                        })
+                    }}
+                >
+                    Update Issues
+                </Button>
             </div>
         </div>
     )

@@ -10,7 +10,7 @@ interface WebSocketOptions {
 // Setup WebSocket connection for real-time compliance flags
 export function setupWebSocket(options: WebSocketOptions = {}) {
   // Using the specified WebSocket endpoint
-  const WS_ENDPOINT = "wss://example.com/dummy-endpoint"
+  const WS_ENDPOINT = "ws://localhost:3000"
 
   let socket: WebSocket | null = null
   let reconnectAttempts = 0
