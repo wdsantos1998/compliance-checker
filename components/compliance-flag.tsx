@@ -11,52 +11,51 @@ interface ComplianceFlagProps {
 }
 
 export default function ComplianceFlag({ flag, onDismiss }: ComplianceFlagProps) {
-  const severityColors = {
-    high: "bg-red-100 border-red-400 text-red-800",
-    medium: "bg-yellow-100 border-yellow-400 text-yellow-800",
-    low: "bg-blue-100 border-blue-400 text-blue-800",
+  // Optional: Color only the left border based on severity
+  const severityBorder = {
+    high: "border-red-500",
+    medium: "border-yellow-500",
+    low: "border-gray-300",
   }
 
-  const severityColor = severityColors[flag.severity] || severityColors.medium
+  const borderColor = severityBorder[flag.severity] || severityBorder.medium
 
   return (
-      <Card className={`border-l-4 ${severityColor} shadow-sm`}>
+      <Card className={`border-l-4 ${borderColor} bg-white shadow-sm`}>
         <CardHeader className="flex flex-row items-start justify-between pb-2">
           <div className="flex items-center gap-2">
-            <AlertCircle className="h-5 w-5 text-gray-600" />
-            <CardTitle className="text-lg font-semibold">{flag.title}</CardTitle>
+            <AlertCircle className="h-5 w-5 text-gray-500" />
+            <CardTitle className="text-lg font-medium text-gray-800">{flag.title}</CardTitle>
           </div>
           <Button variant="ghost" size="icon" onClick={onDismiss} className="h-8 w-8">
-            <X className="h-4 w-4" />
+            <X className="h-4 w-4 text-gray-500" />
             <span className="sr-only">Dismiss</span>
           </Button>
         </CardHeader>
 
-        <CardContent className="space-y-4 text-sm">
-          <p className="text-gray-700">{flag.description}</p>
+        <CardContent className="space-y-4 text-sm text-gray-700">
+          <p>{flag.description}</p>
 
           {/* ✅ Source Info */}
-          <div className="bg-gray-50 p-3 rounded border">
-            <p className="text-xs text-gray-500">📄 <span className="font-medium">Source Document:</span> {flag.documentSource || 'N/A'}</p>
-            <p className="text-xs text-gray-500">✉️ <span className="font-medium">Email Origin:</span> {flag.emailOrigen || 'N/A'}</p>
+          <div className="p-3 rounded bg-gray-100 text-xs">
+            <p><span className="font-medium">📄 Source:</span> {flag.documentSource || 'N/A'}</p>
+            <p><span className="font-medium">✉️ Email:</span> {flag.emailOrigen || 'N/A'}</p>
           </div>
 
           {/* ✅ Proposed Solution */}
           {flag.proposedSolution && (
-              <div className="bg-green-50 p-3 rounded border border-green-200">
-                <p className="text-xs text-green-700 font-medium">✅ Proposed Solution:</p>
-                <p className="text-xs text-green-800 mt-1">{flag.proposedSolution}</p>
+              <div className="p-3 rounded bg-gray-50 border text-xs">
+                <p className="font-medium text-gray-600">✅ Proposed Solution:</p>
+                <p className="mt-1 text-gray-700">{flag.proposedSolution}</p>
               </div>
           )}
 
           {/* ✅ Timestamp and Severity */}
           <div className="flex items-center justify-between text-xs text-gray-500">
             <span>{new Date(flag.timestamp).toLocaleString()}</span>
-            <span className="font-medium capitalize">{flag.severity} Severity</span>
+            <span className="capitalize font-medium">{flag.severity} Severity</span>
           </div>
         </CardContent>
       </Card>
-
   )
 }
-

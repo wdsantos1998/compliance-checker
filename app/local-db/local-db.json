@@ -1,20 +1,12 @@
 [
   {
-    "title": "Test notification",
-    "description": "A user tried to access a restricted area without proper authorization.",
-    "severity": "High",
-    "category": "Security"
-  },
-  {
-    "title": "Test notification",
-    "description": "A user tried to access a restricted area without proper authorization.",
-    "severity": "High",
-    "category": "Security"
-  },
-  {
-    "title": "Test notification",
-    "description": "A user tried to access a restricted area without proper authorization.",
-    "severity": "High",
-    "category": "Security"
+    "id": 1,
+    "title": "Misleading Investment Guarantee",
+    "description": "The email promises a 50% return in one month, which is unrealistic and violates financial advertising rules.",
+    "severity": "low",
+    "proposedSolution": "Remove the unrealistic return guarantee and include appropriate risk disclosures.",
+    "timestamp": "2025-03-22T11:17:36.092Z",
+    "emailOrigen": "investments@quickriches.com",
+    "documentSource": "structured_compliance_rules.json"
   }
 ]

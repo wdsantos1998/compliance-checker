@@ -73,7 +73,7 @@ export default function ComplianceDashboard() {
                 })
               }}
           >
-            🗑️ Clear All Issues
+            Clear All Issues
           </Button>
 
           <Button
@@ -88,7 +88,7 @@ export default function ComplianceDashboard() {
                 })
               }}
           >
-            🔄 Update Issues
+              Update Issues
           </Button>
         </div>
       </div>
