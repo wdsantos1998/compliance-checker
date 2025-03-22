@@ -1,10 +1,11 @@
 "use client"
 
 import Link from "next/link"
-import { usePathname } from "next/navigation"
+import {redirect, usePathname} from "next/navigation"
 import { Bell } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { useComplianceContext } from "@/context/compliance-context"
+import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from "@/components/ui/tooltip"
 
 export default function Navbar() {
   const pathname = usePathname()
@@ -40,16 +41,28 @@ export default function Navbar() {
             </Link>
           </nav>
         </div>
-
-        <div className="flex items-center">
-          <Button variant="ghost" size="icon" className="relative">
-            <Bell className="h-5 w-5" />
-            {activeFlagCount > 0 && (
-              <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
-                {activeFlagCount}
-              </span>
-            )}
-          </Button>
+        <div className="flex items-center" onClick={() => redirect("/dashboard")}>
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button variant="ghost" size="icon" className="relative">
+                  <Bell className="h-5 w-5" />
+                  {activeFlagCount > 0 && (
+                      <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+            {activeFlagCount}
+          </span>
+                  )}
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent
+                  side="bottom"
+                  align="center"
+                  sideOffset={8}
+                  avoidCollisions>
+                You have {activeFlagCount} active compliance {activeFlagCount === 1 ? 'flag' : 'flags'}
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
         </div>
       </div>
     </header>
