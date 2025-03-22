@@ -33,7 +33,7 @@ export default function EmailFetcher() {
 
     return (
         <div className="p-6 max-w-5xl mx-auto">
-            <h1 className="text-3xl font-bold mb-6">📨 Recent Emails (Auto-refresh every 5s)</h1>
+            <h1 className="text-3xl font-bold mb-6">Recent Emails</h1>
 
             {data?.emails?.length === 0 ? (
                 <div className="text-gray-500">No emails found.</div>
