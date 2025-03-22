@@ -1,12 +1,10 @@
 'use client';
 
 import useSWR from 'swr';
-import { useEffect } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import {getGmailEmails} from "@/lib/gmail";
 import {postToPolicyChecker} from "@/lib/postToPolicyChecker";
 
 const fetcher = (url: string) =>
