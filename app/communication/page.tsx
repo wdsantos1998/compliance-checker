@@ -11,7 +11,11 @@ const fetcher = (url: string) =>
     fetch(url, { credentials: 'include' }).then((res) => res.json());
 
 export default function EmailFetcher() {
-    const { data, error, isLoading, mutate } = useSWR('/api/emails', fetcher, { refreshInterval: 5000 });
+    //To triggered refresh
+    const { data, error, isLoading, mutate } = useSWR('/api/emails', fetcher);
+    //To auto-refresh refresh
+    // const { data, error, isLoading, mutate } = useSWR('/api/emails', fetcher,{refreshInterval: 10000});
+    //To analyze emails with the policy checker
     // postToPolicyChecker( process.env.LOCAL_URL??'http://localhost:3000', data?.emails);
 
     if (isLoading) {
@@ -30,8 +34,12 @@ export default function EmailFetcher() {
 
     return (
         <div className="p-6 max-w-5xl mx-auto">
+            <div className="flex flex-row justify-between items-center">
             <h1 className="text-3xl font-bold mb-6">Recent Emails</h1>
-
+            <div className="flex justify-end mb-6">
+                <Button variant="secondary" onClick={() => mutate()}>Refresh Now</Button>
+            </div>
+            </div>
             {!data?.emails || data?.emails?.length === 0 ? (
                 <div className="text-gray-500">Oops. No emails found.</div>
             ) : (
@@ -69,10 +77,6 @@ export default function EmailFetcher() {
                     ))}
                 </div>
             )}
-
-            <div className="mt-8 flex justify-end">
-                <Button variant="secondary" onClick={() => mutate()}>🔄 Refresh Now</Button>
-            </div>
         </div>
     );
 }
