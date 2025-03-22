@@ -7,12 +7,14 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import {getGmailEmails} from "@/lib/gmail";
+import {postToPolicyChecker} from "@/lib/postToPolicyChecker";
 
 const fetcher = (url: string) =>
     fetch(url, { credentials: 'include' }).then((res) => res.json());
 
 export default function EmailFetcher() {
     const { data, error, isLoading, mutate } = useSWR('/api/emails', fetcher, { refreshInterval: 5000 });
+    // postToPolicyChecker( process.env.LOCAL_URL??'http://localhost:3000', data?.emails);
 
     if (isLoading) {
         return (
