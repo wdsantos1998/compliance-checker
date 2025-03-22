@@ -1,38 +1,57 @@
-import { type NextRequest, NextResponse } from "next/server"
-import type { ComplianceFlag } from "@/types/compliance"
-import { v4 as uuidv4 } from "uuid"
-
-// POST /api/oauth2-callback
-// Accepts an authorization token from Google
+import {NextRequest, NextResponse} from "next/server";
+import oauth2Client from "@/app/utils/google-auth";
+// Route: GET /api/oauth2/callback
+// This handles the redirect from Google's OAuth flow
 export async function GET(request: NextRequest) {
+  const {searchParams} = new URL(request.url);
+  const code = searchParams.get("code");
+  const error = searchParams.get("error");
+  if (error) {
+    console.error("Google OAuth error:", error);
+    return NextResponse.json({error}, {status: 400});
+  }
+
+  if (!code) {
+    return NextResponse.json({error: "Missing required code parameter"}, {status: 400});
+  }
+
   try {
-    const body = await request.json()
+    // Exchange authorization code for access and ID tokens
+    console.log("Using redirect_uri:", process.env.REDIRECT_URI);
 
-    // Validate required fields
-    if (!body.title || !body.description) {
-      return NextResponse.json(
-        { error: "Missing required fields: title and description are required" },
-        { status: 400 },
-      )
+    const {tokens} = await oauth2Client.getToken({
+      code,
+      redirect_uri: process.env.REDIRECT_URI,
+    });
+    oauth2Client.setCredentials(tokens); // Important if you plan to use oauth2Client later
+
+    // Optional: Verify the ID token (if you need user profile info from ID token)
+    let userInfo;
+    if (tokens.id_token) {
+      const ticket = await oauth2Client.verifyIdToken({
+        idToken: tokens.id_token,
+      });
+      userInfo = ticket.getPayload();
     }
 
-    // Create a new compliance flag with generated ID and timestamp
-    const newFlag: ComplianceFlag = {
-      id: uuidv4(),
-      title: body.title,
-      description: body.description,
-      severity: body.severity || "medium",
-      timestamp: new Date().toISOString(),
-      category: body.category || "general",
-    }
+    const response = NextResponse.json({message: "Authentication successful", user: userInfo, tokens});
 
-    // In a real implementation, you would save this to a database
-    // For now, we'll just return the created flag
+    // Set cookie in the response
+    response.cookies.set({
+      name: "google_access_token",
+      value: tokens.access_token || "",
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      path: "/",
+      maxAge: 60 * 60 * 24 * 7, // 1 week
+    });
 
-    return NextResponse.json(newFlag, { status: 201 })
-  } catch (error) {
-    console.error("Error processing compliance issue:", error)
-    return NextResponse.json({ error: "Failed to process compliance issue" }, { status: 500 })
+    return NextResponse.redirect(new URL("/dashboard", request.url));
+  } catch (err) {
+    console.error("Google OAuth token exchange error:", err);
+    return NextResponse.json(
+        {error: "Google OAuth Error: Failed to exchange code"},
+        {status: 500}
+    );
   }
 }
-

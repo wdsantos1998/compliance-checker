@@ -21,7 +21,7 @@ export default function Navbar() {
           </Link>
           <nav className="ml-8 hidden md:flex space-x-4">
             <Link
-              href="/"
+              href="/dashboard"
               className={`text-sm ${pathname === "/" ? "text-primary font-medium" : "text-gray-600 hover:text-gray-900"}`}
             >
               Dashboard
