@@ -19,7 +19,6 @@ export async function GET(req: NextRequest) {
 
     try {
         const emails = await getGmailEmails(accessToken);
-        console.log('Fetched Gmail emails:', emails);
         return NextResponse.json({ emails }, { status: 200 });
     } catch (error) {
         console.error('Failed to fetch Gmail emails:', error);

@@ -22,7 +22,7 @@ from dotenv import load_dotenv
 # HARDCODE THE ABSOLUTE PATH TO .env.local
 from dotenv import load_dotenv
 
-dotenv_path = r"C:\Users\juliosud\OneDrive - Church of Jesus Christ\Desktop\Winter 2025\sandbox\.env.local"
+dotenv_path = r"C:\Users\juliosud\OneDrive - Church of Jesus Christ\Desktop\Winter 2025\sandbox\compliance-checker\.env.local"
 load_dotenv(dotenv_path)  # ✅ Load .env file first
 api_key = os.getenv("OPENAI_API_KEY")  # ✅ Then retrieve key
 
@@ -159,30 +159,30 @@ def analyze_email(email_json_str):
     return all_violations
 
 
-# if __name__ == "__main__":
-#     test_email = {
-#         "title": "Urgent Investment Offer",
-#         "content": "We guarantee 25% returns with no risk at all. Just send the money today!"
-#     }
-
-#     result = analyze_email(json.dumps(test_email))
-#     print(json.dumps(result, indent=2))
-
-
 if __name__ == "__main__":
-    import sys
+    test_email = {
+        "title": "Urgent Investment Offer",
+        "content": "We guarantee 25% returns with no risk at all. Just send the money today!"
+    }
 
-    if len(sys.argv) < 3:
-        print("Usage: python policy-cheker.py '<title>' '<body>'")
-        sys.exit(1)
+    result = analyze_email(json.dumps(test_email))
+    print(json.dumps(result, indent=2))
 
-    title = sys.argv[1]
-    body = sys.argv[2]
 
-    email_json = json.dumps({
-        "title": title,
-        "content": body
-    })
+# if __name__ == "__main__":
+#     import sys
 
-    violations = analyze_email(email_json)
-    print(json.dumps(violations)) 
+#     if len(sys.argv) < 3:
+#         print("Usage: python policy-cheker.py '<title>' '<body>'")
+#         sys.exit(1)
+
+#     title = sys.argv[1]
+#     body = sys.argv[2]
+
+#     email_json = json.dumps({
+#         "title": title,
+#         "content": body
+#     })
+
+#     violations = analyze_email(email_json)
+#     print(json.dumps(violations)) 
