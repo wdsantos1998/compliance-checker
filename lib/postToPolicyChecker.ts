@@ -10,7 +10,6 @@ export const postToPolicyChecker = async (
 ) =>{
     const endpoint = `${baseUrl}/api/policy-checker`;
     const results = [];
-    // console.log("This is the jsonArray for an instance of email", jsonArray);
     for (let i = 0; i < jsonArray.length; i++) {
         try {
             const response = await fetch(endpoint, {

@@ -8,7 +8,7 @@ export async function getGmailEmails(accessToken: string) {
 
     const res = await gmail.users.messages.list({
         userId: 'me',
-        maxResults: 1, // Adjust as needed
+        maxResults: 5, // Adjust as needed
     });
 
     if (!res.data.messages) return [];
@@ -34,15 +34,24 @@ export async function getGmailEmails(accessToken: string) {
 
             // Function to extract the plain text part of the email
             const extractPlainText = (part: any): string => {
+                let text = '';
+
                 if (part?.mimeType === 'text/plain' && part.body?.data) {
-                    return Buffer.from(part.body.data, 'base64').toString('utf-8');
+                    text = Buffer.from(part.body.data, 'base64').toString('utf-8');
+                } else if (part?.parts?.length) {
+                    text = part.parts.map(extractPlainText).join('\n');
                 }
 
-                if (part?.parts?.length) {
-                    return part.parts.map(extractPlainText).join('\n');
-                }
+                // Clean the extracted text:
+                // - Remove non-ASCII characters
+                // - Remove backticks, quotes, markdown artifacts, or special characters
+                const cleanedText = text
+                    .replace(/[`'"*#>\u2018\u2019\u201C\u201D]/g, '') // remove common markdown/special chars & smart quotes
+                    .replace(/[^\x00-\x7F]/g, '')                  // remove non-ASCII
+                    .replace(/\s+/g, ' ')                          // normalize multiple spaces/newlines
+                    .trim();
 
-                return '';
+                return cleanedText;
             };
 
             const textContent = extractPlainText(payload).trim();
