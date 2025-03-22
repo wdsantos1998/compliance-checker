@@ -29,7 +29,7 @@ const loadPolicyDocuments = (): { filename: string; content: any }[] => {
 };
 
 // === Chunk Policy Content ===
-const chunkPolicyContent = (content: any, chunkSize: number = 90000): string[] => {
+const chunkPolicyContent = (content: any, chunkSize: number = 300000): string[] => {
     const contentStr = JSON.stringify(content, null, 2);
     return contentStr.match(new RegExp(`.{1,${chunkSize}}`, "g")) || [];
 };

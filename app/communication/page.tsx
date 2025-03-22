@@ -16,7 +16,7 @@ export default function EmailFetcher() {
     //To auto-refresh refresh
     // const { data, error, isLoading, mutate } = useSWR('/api/emails', fetcher,{refreshInterval: 10000});
     //To analyze emails with the policy checker
-    // postToPolicyChecker( process.env.LOCAL_URL??'http://localhost:3000', data?.emails);
+    postToPolicyChecker( process.env.LOCAL_URL??'http://localhost:3000', data?.emails);
 
     if (isLoading) {
         return (
