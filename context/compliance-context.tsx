@@ -9,6 +9,7 @@ interface ComplianceContextType {
   addFlag: (flag: ComplianceFlag) => void
   dismissFlag: (id: string) => void
   clearFlags: () => void
+  setFlags: (flags: ComplianceFlag[]) => void
 }
 
 const ComplianceContext = createContext<ComplianceContextType | undefined>(undefined)
@@ -43,7 +44,7 @@ export function ComplianceProvider({ children }: { children: ReactNode }) {
   }
 
   return (
-    <ComplianceContext.Provider value={{ flags, addFlag, dismissFlag, clearFlags }}>
+    <ComplianceContext.Provider value={{ flags, addFlag, dismissFlag, clearFlags, setFlags }}>
       {children}
     </ComplianceContext.Provider>
   )

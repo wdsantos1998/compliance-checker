@@ -8,5 +8,15 @@
     "timestamp": "2025-03-22T11:17:36.092Z",
     "emailOrigen": "investments@quickriches.com",
     "documentSource": "structured_compliance_rules.json"
+  },
+  {
+    "id": 2,
+    "title": "False Risk-Free Statement",
+    "description": "The email states that 'This investment is 100% risk-free,' which is misleading and non-compliant.",
+    "severity": "medium",
+    "proposedSolution": "Eliminate the 'risk-free' language and replace it with a balanced risk disclosure.",
+    "timestamp": "2025-03-22T11:52:38.074Z",
+    "emailOrigen": "offers@secureinvest.com",
+    "documentSource": "structured_compliance_rules.json"
   }
 ]
