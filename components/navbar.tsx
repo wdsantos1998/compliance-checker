@@ -32,6 +32,12 @@ export default function Navbar() {
             >
               Management
             </Link>
+            <Link
+              href="/communication"
+              className={`text-sm ${pathname === "/communication" ? "text-primary font-medium" : "text-gray-600 hover:text-gray-900"}`}
+            >
+              Communication
+            </Link>
           </nav>
         </div>
 

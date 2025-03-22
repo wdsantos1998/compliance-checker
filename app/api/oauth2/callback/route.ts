@@ -1,25 +1,25 @@
-import {NextRequest, NextResponse} from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import oauth2Client from "@/app/utils/google-auth";
-// Route: GET /api/oauth2/callback
-// This handles the redirect from Google's OAuth flow
+
 export async function GET(request: NextRequest) {
-  const {searchParams} = new URL(request.url);
+  const { searchParams } = new URL(request.url);
   const code = searchParams.get("code");
   const error = searchParams.get("error");
+
   if (error) {
     console.error("Google OAuth error:", error);
-    return NextResponse.json({error}, {status: 400});
+    return NextResponse.json({ error }, { status: 400 });
   }
 
   if (!code) {
-    return NextResponse.json({error: "Missing required code parameter"}, {status: 400});
+    return NextResponse.json({ error: "Missing required code parameter" }, { status: 400 });
   }
 
   try {
     // Exchange authorization code for access and ID tokens
     console.log("Using redirect_uri:", process.env.REDIRECT_URI);
 
-    const {tokens} = await oauth2Client.getToken({
+    const { tokens } = await oauth2Client.getToken({
       code,
       redirect_uri: process.env.REDIRECT_URI,
     });
@@ -34,24 +34,23 @@ export async function GET(request: NextRequest) {
       userInfo = ticket.getPayload();
     }
 
-    const response = NextResponse.json({message: "Authentication successful", user: userInfo, tokens});
-
-    // Set cookie in the response
+    // Create a response object and set the cookie
+    const response = NextResponse.redirect(new URL("/dashboard", request.url));
     response.cookies.set({
       name: "google_access_token",
       value: tokens.access_token || "",
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
+      secure: process.env.NODE_ENV === "production", // Only set secure in production
       path: "/",
       maxAge: 60 * 60 * 24 * 7, // 1 week
     });
 
-    return NextResponse.redirect(new URL("/dashboard", request.url));
+    return response;
   } catch (err) {
     console.error("Google OAuth token exchange error:", err);
     return NextResponse.json(
-        {error: "Google OAuth Error: Failed to exchange code"},
-        {status: 500}
+        { error: "Google OAuth Error: Failed to exchange code" },
+        { status: 500 }
     );
   }
 }
