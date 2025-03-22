@@ -1,0 +1,20 @@
+[
+  {
+    "title": "Test notification",
+    "description": "A user tried to access a restricted area without proper authorization.",
+    "severity": "High",
+    "category": "Security"
+  },
+  {
+    "title": "Test notification",
+    "description": "A user tried to access a restricted area without proper authorization.",
+    "severity": "High",
+    "category": "Security"
+  },
+  {
+    "title": "Test notification",
+    "description": "A user tried to access a restricted area without proper authorization.",
+    "severity": "High",
+    "category": "Security"
+  }
+]

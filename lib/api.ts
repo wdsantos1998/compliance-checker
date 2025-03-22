@@ -5,7 +5,7 @@ const API_BASE_URL = "/api"
 // Fetch compliance flags from the backend
 export async function fetchComplianceFlags(): Promise<ComplianceFlag[]> {
   try {
-    const response = await fetch(`${API_BASE_URL}/compliance-flags`)
+    const response = await fetch(`${API_BASE_URL}/db`)
 
     if (!response.ok) {
       throw new Error(`Failed to fetch compliance flags: ${response.status}`)

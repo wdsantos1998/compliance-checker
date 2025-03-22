@@ -1,10 +1,11 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import React, { useEffect, useState } from "react"
 import { useToast } from "@/components/ui/use-toast"
 import ComplianceFlag from "@/components/compliance-flag"
 import { useComplianceContext } from "@/context/compliance-context"
 import { setupWebSocket } from "@/lib/websocket"
+import { Button } from "@/components/ui/button";
 
 export default function ComplianceDashboard() {
   const { flags, dismissFlag, addFlag } = useComplianceContext()
@@ -47,30 +48,51 @@ export default function ComplianceDashboard() {
   }, [toast, addFlag])
 
   return (
-    <div className="space-y-6">
-      <div className="flex justify-between items-center">
-        <div className="flex items-center gap-2">
-          <div className={`h-3 w-3 rounded-full ${isConnected ? "bg-green-500" : "bg-red-500"}`}></div>
-          <span className="text-sm text-gray-600">
-            {isConnected ? "Connected to real-time monitoring" : "Disconnected from real-time monitoring"}
-          </span>
-        </div>
-      </div>
-
       <div className="bg-white rounded-lg shadow p-6">
         <h2 className="text-xl font-semibold mb-4">Active Compliance Issues</h2>
 
         {flags.length === 0 ? (
-          <div className="text-center py-8 text-gray-500">No compliance issues detected</div>
+            <div className="text-center py-8 text-gray-500">No compliance issues detected</div>
         ) : (
-          <div className="space-y-4">
-            {flags.map((flag) => (
-              <ComplianceFlag key={flag.id} flag={flag} onDismiss={() => dismissFlag(flag.id)} />
-            ))}
-          </div>
+            <div className="space-y-4">
+              {flags.map((flag) => (
+                  <ComplianceFlag key={flag.id} flag={flag} onDismiss={() => dismissFlag(flag.id)}/>
+              ))}
+            </div>
         )}
+
+        {/* ✅ Action Buttons */}
+        <div className="flex justify-end gap-4 mt-6">
+          <Button
+              variant="destructive"
+              onClick={async () => {
+                await fetch("/api/db", {method: "DELETE"})
+                toast({
+                  title: "All Issues Cleared",
+                  description: "The compliance issue list has been cleared.",
+                })
+              }}
+          >
+            🗑️ Clear All Issues
+          </Button>
+
+          <Button
+              variant="secondary"
+              onClick={async () => {
+                const res = await fetch("/api/db")
+                const data = await res.json()
+                console.log("Fetched issues:", data)
+                toast({
+                  title: "Issues Updated",
+                  description: `Fetched ${data.length} compliance issue(s) from the database.`,
+                })
+              }}
+          >
+            🔄 Update Issues
+          </Button>
+        </div>
       </div>
-    </div>
+
   )
 }
 
