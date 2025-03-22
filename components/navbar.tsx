@@ -18,7 +18,7 @@ export default function Navbar() {
       <div className="container mx-auto px-4 py-3 flex items-center justify-between">
         <div className="flex items-center">
           <Link href="/" className="font-bold text-xl">
-            Compliance Checker
+            TrustLayer
           </Link>
           <nav className="ml-8 hidden md:flex space-x-4">
             <Link

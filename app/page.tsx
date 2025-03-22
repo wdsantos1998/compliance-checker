@@ -17,7 +17,7 @@ export default function Page() {
     return (
         <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center p-8">
             <h1 className="text-4xl font-bold text-gray-800 mb-4 text-center">
-                Contract Compliance Checker
+                TrustLayer
             </h1>
             <p className="text-lg text-gray-600 mb-8 text-center max-w-xl">
                 Automatically analyze your email attachments for contract compliance. Connect your Gmail account securely and let AI handle the heavy lifting.
