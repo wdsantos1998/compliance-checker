@@ -8,7 +8,7 @@ export async function getGmailEmails(accessToken: string) {
 
     const res = await gmail.users.messages.list({
         userId: 'me',
-        maxResults: 5, // Adjust as needed
+        maxResults: 1, // Adjust as needed
     });
 
     if (!res.data.messages) return [];
