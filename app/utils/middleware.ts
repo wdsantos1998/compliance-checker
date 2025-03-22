@@ -13,6 +13,12 @@ export function middleware(request: NextRequest) {
     if (!token && pathname.startsWith('/dashboard')) {
         return NextResponse.redirect(new URL('/', request.url)); // Send back to landing
     }
+    if (!token && pathname.startsWith('/upload')) {
+        return NextResponse.redirect(new URL('/', request.url)); // Send back to landing
+    }
+    if (!token && pathname.startsWith('/communication')) {
+        return NextResponse.redirect(new URL('/', request.url)); // Send back to landing
+    }
 
     return NextResponse.next();
 }
