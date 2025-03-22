@@ -85,7 +85,7 @@ export default function ComplianceDashboard() {
                 <Button
                     variant="destructive"
                     onClick={async () => {
-                        await fetch("/api/db", { method: "DELETE" })
+                        await fetch("/api/db", { method: "DELETE" }).then(() => setFlags([]))
                         toast({
                             title: "All Issues Cleared",
                             description: "The compliance issue list has been cleared.",
