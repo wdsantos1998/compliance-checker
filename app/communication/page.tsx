@@ -6,16 +6,13 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import {getGmailEmails} from "@/lib/gmail";
 
 const fetcher = (url: string) =>
     fetch(url, { credentials: 'include' }).then((res) => res.json());
 
 export default function EmailFetcher() {
     const { data, error, isLoading, mutate } = useSWR('/api/emails', fetcher, { refreshInterval: 5000 });
-
-    useEffect(() => {
-        console.log('Fetched Emails:', data);
-    }, [data]);
 
     if (isLoading) {
         return (
@@ -35,11 +32,11 @@ export default function EmailFetcher() {
         <div className="p-6 max-w-5xl mx-auto">
             <h1 className="text-3xl font-bold mb-6">Recent Emails</h1>
 
-            {data?.emails?.length === 0 ? (
-                <div className="text-gray-500">No emails found.</div>
+            {!data?.emails || data?.emails?.length === 0 ? (
+                <div className="text-gray-500">Oops. No emails found.</div>
             ) : (
                 <div className="space-y-6">
-                    {data.emails.map((email: any) => (
+                    {data?.emails && data.emails?.map((email: any) => (
                         <Card key={email.id} className="rounded-2xl shadow-lg border border-gray-200">
                             <CardContent className="space-y-4">
                                 <div className="flex justify-between items-start p-10">
