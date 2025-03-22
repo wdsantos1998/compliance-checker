@@ -20,7 +20,8 @@ export async function GET() {
 export async function POST(req: NextRequest) {
     try {
         const newIssue = await req.json();
-        if (!newIssue.title || !newIssue.description) {
+        console.log('New issue:', JSON.stringify(newIssue));
+        if (!newIssue) {
             return NextResponse.json({ error: 'Missing required fields: title and description are required' }, { status: 400 });
         }
 
@@ -45,7 +46,7 @@ export async function POST(req: NextRequest) {
         // Write back updated issues array
         await fs.writeFile(DB_PATH, JSON.stringify(issues, null, 2));
 
-        return NextResponse.json({ message: 'Issue saved successfully' });
+        return NextResponse.json({ message: 'Issue saved successfully' }, { status: 200 });
     } catch (error) {
         console.error('Error saving issue:', error);
         return NextResponse.json({ error: 'Failed to save data' }, { status: 500 });

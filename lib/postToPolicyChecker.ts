@@ -7,9 +7,10 @@ export interface PolicyPayload {
 export const postToPolicyChecker = async (
     baseUrl: string,
     jsonArray: PolicyPayload[]
-) =>{
+) => {
     const endpoint = `${baseUrl}/api/policy-checker`;
     const results = [];
+
     for (let i = 0; i < jsonArray.length; i++) {
         try {
             const response = await fetch(endpoint, {
@@ -21,23 +22,28 @@ export const postToPolicyChecker = async (
             });
 
             const data = await response.json();
-            for (let i = 0; i < jsonArray.length; i++) {
-                const dbResponse = await fetch('/api/db', {
+            // Ensure we process the array of results inside `data.result`
+            const dataArray = Array.isArray(data.result) ? data.result : [];
+
+            for (let j = 0; j < dataArray.length; j++) {
+                const item = dataArray[j];
+
+                const dbResponse = await fetch(`${baseUrl}/api/db`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify(jsonArray[i]),  // Send each string as body
+                    body: JSON.stringify(item),
                 });
 
-                if (!dbResponse.ok) {
-                    console.error(`Failed to insert item ${i}:`);
+                if (dbResponse.status === 200) {
+                    console.log(`Inserted item ${i}.${j} into DB`);
                 } else {
-                    console.log(`Inserted item ${i}`);
+                    console.error(`Failed to insert item ${i}.${j} into DB`);
                 }
             }
-        } catch (error: any) {
-            console.log("An error occurred", error);
+        }catch (error) {
+            console.error(`Error processing item ${i}:`, error);
         }
     }
 };

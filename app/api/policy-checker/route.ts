@@ -96,11 +96,12 @@ const analyzeEmail = async (emailJson: ParsedEmail) => {
         for (const doc of policyDocuments) {
             const chunks = chunkPolicyContent(doc.content);
 
-            for (let i = 0; i < chunks.length; i++) {
-                const chunkPrompt = `Document: ${doc.filename} (Part ${i + 1})\n${chunks[i]}`;
+            for (let i = 0; i < 4; i++) {
+                let randomNumber = Math.floor(Math.random() * chunks.length);
+                const chunkPrompt = `Document: ${doc.filename} (Part ${randomNumber + 1})\n${chunks[randomNumber]}`;
 
                 try {
-                    console.log(`→ Analyzing chunk ${i + 1} of ${chunks.length} from '${doc.filename}'...`);
+                    console.log(`→ Analyzing chunk ${randomNumber + 1} of ${chunks.length} from '${doc.filename}'...`);
 
                     const response = await openai.chat.completions.create({
                         model: "gpt-4o",
@@ -125,11 +126,10 @@ const analyzeEmail = async (emailJson: ParsedEmail) => {
                     if (Array.isArray(violations)) {
                         allViolations = allViolations.concat(violations);
                     }
-
                     // Wait 3 seconds to avoid hitting token-per-minute (TPM) limits
                     await new Promise((resolve) => setTimeout(resolve, 3000));
                 } catch (error) {
-                    console.error(`⚠️ Failed to process chunk ${i + 1}:`, error);
+                    console.error(`⚠️ Failed to process chunk ${randomNumber + 1}:`, error);
                     allViolations.push({
                         id: null,
                         title: "Analysis Error",
@@ -143,7 +143,6 @@ const analyzeEmail = async (emailJson: ParsedEmail) => {
                 }
             }
         }
-
         return allViolations;
     } catch (error) {
         console.error("Unexpected error during analysis:", error);
@@ -155,6 +154,7 @@ const analyzeEmail = async (emailJson: ParsedEmail) => {
 export async function POST(req: NextRequest) {
     try {
         const emailJson = await req.json();
+        console.log("📧 Received email for analysis:", emailJson);
 
         const result = await analyzeEmail(emailJson);
 
