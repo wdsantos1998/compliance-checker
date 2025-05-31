@@ -1,12 +1,30 @@
 
 # 📧 Communication Compliance AI Checker
 
-## 🛠 Technologies Used
-- **Next.js** with **React**
-- **Tailwind CSS**
-- **OpenAI API**
+## 💼 Project Purpose
 
----
+This project leverages OpenAI's language models to analyze corporate emails and communications for potential compliance violations.
+
+By proactively identifying risky or non-compliant language, companies can:
+✅ Prevent regulatory fines  
+✅ Avoid lawsuits  
+✅ Protect their reputation
+
+💰 **Saving millions of dollars** by managing communication compliance effectively.
+
+## 🛠 Technologies Used
+- Frontend:
+   - **Next.js** with **React**
+   - **Tailwind CSS**
+- Backend:
+   - OpenAI API (for embeddings and policy matching)
+   - FastAPI or Next.js API routes
+- File Storage:
+  - AWS S3 or Supabase Storage (for PDFs, communications)
+- Database:
+  - PostgreSQL with pgvector extension (for storing semantic vectors)
+-Auth:
+  - Supabase Auth or custom JWT-based auth with Role-Based Access Control (RBAC)
 
 ## 🚀 How to Run the Project
 
@@ -44,19 +62,11 @@
 
 ---
 
-## 💼 Project Purpose
-
-This project leverages OpenAI's language models to analyze corporate emails and communications for potential compliance violations.
-
-By proactively identifying risky or non-compliant language, companies can:
-✅ Prevent regulatory fines  
-✅ Avoid lawsuits  
-✅ Protect their reputation
-
-💰 **Saving millions of dollars** by managing communication compliance effectively.
 
 ---
 
 ## 👨‍💻 Developers
-- **Julio Ferreira**
 - **Wesley dos Santos**
+
+##UX Example
+![Screenshot 2025-05-30 at 23 51 09](https://github.com/user-attachments/assets/e134adca-0203-4cd4-990c-6711aae29c0b)
